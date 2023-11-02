@@ -1,0 +1,7 @@
+{
+    "dataset_v1": {
+        "dataset_path": "../data/data_for_annotation.csv",
+        "dataset_name": "my_text_classification_of_letters",
+        "labels": ["A", "B", "C"]
+    }
+}
