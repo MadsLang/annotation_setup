@@ -94,15 +94,15 @@ resource "aws_security_group" "public_ec2_security_group" {
   }
 }
 
-resource "aws_instance" "argilla_annotation_server" {
-  ami                         = "ami-0703b5d7f7da98d1e"
-  instance_type               = "t3.micro"
-  subnet_id                   = aws_subnet.public_main.id
-  security_groups             = [aws_security_group.public_ec2_security_group.id]
-  associate_public_ip_address = true
-  user_data                   = file("init.sh")
-
-  tags = {
-    Name = "argilla_annotation_server"
-  }
-}
+# resource "aws_instance" "argilla_annotation_server" {
+#   ami                         = "ami-0703b5d7f7da98d1e"
+#   instance_type               = "t3.micro"
+#   subnet_id                   = aws_subnet.public_main.id
+#   security_groups             = [aws_security_group.public_ec2_security_group.id]
+#   associate_public_ip_address = true
+#   user_data                   = file("init.sh")
+#
+#   tags = {
+#     Name = "argilla_annotation_server"
+#   }
+# }

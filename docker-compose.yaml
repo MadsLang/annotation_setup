@@ -16,8 +16,8 @@ services:
       # ARGILLA_LOCAL_AUTH_USERS_DB_FILE: config/users.yaml
 
       # DEFAULT_USER_ENABLED: false # Uncomment this line to disable the creation of the default user
-      DEFAULT_USER_PASSWORD: "password" # Uncomment this line to set a custom password for the default user
-      DEFAULT_USER_API_KEY: "0b2c3901-69b8-47a1-86bb-6b3eed4b1cb8" # Uncomment this line to set a custom api-key for the default user
+      DEFAULT_USER_PASSWORD: $ARGILLA_OWNER_PASSWORD # Uncomment this line to set a custom password for the default user
+      DEFAULT_USER_API_KEY: $ARGILLA_OWNER_API_KEY # Uncomment this line to set a custom api-key for the default user
     networks:
       - argilla
     volumes:
