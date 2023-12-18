@@ -14,8 +14,9 @@ provider "aws" {
 }
 
 resource "aws_vpc" "main" {
-  cidr_block       = "10.0.0.0/16"
+  cidr_block       = "10.0.0.0/24"
   instance_tenancy = "default"
+  enable_dns_hostnames = "true"
 
   tags = {
     Name = "main"
@@ -24,7 +25,7 @@ resource "aws_vpc" "main" {
 
 resource "aws_subnet" "public_main" {
   vpc_id            = aws_vpc.main.id
-  cidr_block        = "10.0.1.0/24"
+  cidr_block        = "10.0.0.0/25"
   availability_zone = "eu-north-1a"
 
   tags = {
@@ -83,6 +84,13 @@ resource "aws_security_group" "public_ec2_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -94,15 +102,21 @@ resource "aws_security_group" "public_ec2_security_group" {
   }
 }
 
-# resource "aws_instance" "argilla_annotation_server" {
-#   ami                         = "ami-0703b5d7f7da98d1e"
-#   instance_type               = "t3.micro"
-#   subnet_id                   = aws_subnet.public_main.id
-#   security_groups             = [aws_security_group.public_ec2_security_group.id]
-#   associate_public_ip_address = true
-#   user_data                   = file("init.sh")
-#
-#   tags = {
-#     Name = "argilla_annotation_server"
-#   }
-# }
+resource "aws_key_pair" "ssh_key" {
+  key_name = "ssh_key"
+  public_key = file("~/.ssh/id_rsa.pub")
+}
+
+resource "aws_instance" "argilla_annotation_server" {
+  ami                         = "ami-0703b5d7f7da98d1e"
+  instance_type               = "t3.micro"
+  key_name                    = aws_key_pair.ssh_key.id
+  subnet_id                   = aws_subnet.public_main.id
+  security_groups             = [aws_security_group.public_ec2_security_group.id]
+  associate_public_ip_address = true
+  user_data                   = file("test_init.sh")
+
+  tags = {
+    Name = "argilla_annotation_server"
+  }
+}
